@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, SXMTickAnimation) {
+    /** 匀速 */
+    SXMTickAnimationLinear,
+    /** 快进慢出 */
+    SXMTickAnimationEaseOut,
+};
+
 @interface SXMTickAnimationView : UIView
 
 /** 线条宽度 */
@@ -18,11 +25,13 @@
 /**
  开始加载动画
  */
-- (void)sxm_startLoading;
+- (void)sxm_startLoadingWithType:(SXMTickAnimation)type;
 
 /**
  结束加载动画
  */
 - (void)sxm_finishedLoading;
+
+// 销毁函数
 
 @end

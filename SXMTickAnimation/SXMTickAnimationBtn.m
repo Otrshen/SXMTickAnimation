@@ -49,7 +49,7 @@
 
     CGFloat tickViewY = (btnH - _tickViewWH) / 2; // 加载圈高度居中
     self.tickView.frame = CGRectMake(0, tickViewY, _tickViewWH, _tickViewWH);
-    [self.tickView sxm_startLoading];
+    [self.tickView sxm_startLoadingWithType:SXMTickAnimationEaseOut];
 
     self.textLabel.text = text; // 设置提示语
     [self calcLoadingViewFrame:text];

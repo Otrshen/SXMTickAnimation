@@ -17,6 +17,9 @@
 @property (nonatomic, assign) CGFloat startAngle;
 @property (nonatomic, assign) CGFloat endAngle;
 @property (nonatomic, assign) CGFloat progress;
+@property (nonatomic, assign) CGFloat progress1;
+
+@property (nonatomic, assign) SXMTickAnimation type;
 
 @end
 
@@ -24,30 +27,73 @@
 
 @synthesize lineWidth = _lineWidth;
 
-- (void)sxm_startLoading
+- (void)sxm_startLoadingWithType:(SXMTickAnimation)type
 {
+    [self createDisplayLinkWithType:type];
+    
     self.animationLayer.lineWidth = self.lineWidth;
-    self.displayLink.paused = false;
+    _displayLink.paused = false;
 }
 
 - (void)sxm_finishedLoading
 {
-    self.displayLink.paused = true;
+    _displayLink.paused = true;
     [self darwTick];
 }
 
 // 转圈动画
 - (void)displayLinkAction
 {
+    switch (self.type) {
+        case SXMTickAnimationLinear:
+            [self updateAnimationLayerLinear];
+            break;
+            
+        case SXMTickAnimationEaseOut:
+            [self updateAnimationLayerEaseOut];
+            break;
+    }
+}
+
+-(void)updateAnimationLayerLinear
+{
+    if (_progress < 0.81) {
+        _progress += [self speedLinear1];
+    }
+    
+    if (_progress > 0.8) {
+        _progress1 += [self speedLinear];
+        _startAngle = -M_PI_2 + _progress1 * (M_PI * 2);
+        
+        _progress += [self speedLinear];
+        _endAngle = -M_PI_2 + _progress * (M_PI * 2);
+    } else {
+        _startAngle = -M_PI_2;
+        _endAngle = -M_PI_2 + _progress * (M_PI * 2);
+    }
+    
+    UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:self.arcCenter radius:self.arcRadius startAngle:_startAngle endAngle:_endAngle clockwise:true];
+    path.lineCapStyle = kCGLineCapRound;
+    
+    _animationLayer.path = path.CGPath;
+}
+
+- (CGFloat)speedLinear {
+    return 1 / 60.0f;
+}
+
+- (CGFloat)speedLinear1 {
+    return 3 / 60.0f;
+}
+
+- (void)updateAnimationLayerEaseOut
+{
     _progress += [self speed];
     
     if (_progress >= 1) {
         _progress = 0;
     }
-    [self updateAnimationLayer];
-}
-
--(void)updateAnimationLayer{
+    
     _startAngle = -M_PI_2;
     _endAngle = -M_PI_2 + _progress * (M_PI * 2);
     
@@ -62,7 +108,8 @@
     _animationLayer.path = path.CGPath;
 }
 
-- (CGFloat)speed{
+- (CGFloat)speed
+{
     if (_endAngle > M_PI) {
         return 0.45 / 60.0f;
     }
@@ -92,6 +139,24 @@
     [self.layer addSublayer:_animationLayer];
 }
 
+- (void)createDisplayLinkWithType:(SXMTickAnimation)type
+{
+    SEL selector = nil;
+    switch (type) {
+        case SXMTickAnimationLinear:
+            selector = @selector(updateAnimationLayerLinear);
+            break;
+            
+        case SXMTickAnimationEaseOut:
+            selector = @selector(updateAnimationLayerEaseOut);
+            break;
+    }
+    
+    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:selector];
+    [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+    _displayLink.paused = true;
+}
+
 - (CGPoint)arcCenter
 {
     return CGPointMake(self.animationLayer.bounds.size.width / 2.0f, self.animationLayer.bounds.size.height / 2.0f);
@@ -115,16 +180,6 @@
         [self.layer addSublayer:_animationLayer];
     }
     return _animationLayer;
-}
-
-- (CADisplayLink *)displayLink
-{
-    if (!_displayLink) {
-        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkAction)];
-        [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-        _displayLink.paused = true;
-    }
-    return _displayLink;
 }
 
 - (CGFloat)lineWidth

@@ -26,10 +26,10 @@
     _tick = [[SXMTickAnimationView alloc] init];
     _tick.frame = CGRectMake(0, 0, 100, 100);
     _tick.lineWidth = 8;
-    _tick.lineColor = [UIColor whiteColor];
+    _tick.lineColor = [UIColor blueColor];
     _tick.center = self.view.center;
-    _tick.backgroundColor = [UIColor greenColor];
-    [_tick sxm_startLoading];
+//    _tick.backgroundColor = [UIColor greenColor];
+    [_tick sxm_startLoadingWithType:SXMTickAnimationLinear];
     [self.view addSubview:_tick];
     
     SXMTickAnimationBtn *btn = [[SXMTickAnimationBtn alloc] initWithTickViewWH:21];
