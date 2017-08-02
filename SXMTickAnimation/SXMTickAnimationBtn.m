@@ -109,4 +109,9 @@
     return _textLabel;
 }
 
+- (void)dealloc
+{
+    NSLog(@"dealloc__btn");
+}
+
 @end

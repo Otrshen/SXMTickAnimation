@@ -32,6 +32,9 @@ typedef NS_ENUM(NSUInteger, SXMTickAnimation) {
  */
 - (void)sxm_finishedLoading;
 
-// 销毁函数
+/**
+ 销毁函数
+ */
+- (void)sxm_destroyView;
 
 @end

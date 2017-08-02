@@ -41,19 +41,14 @@
     [self darwTick];
 }
 
-// 转圈动画
-- (void)displayLinkAction
+- (void)sxm_destroyView
 {
-    switch (self.type) {
-        case SXMTickAnimationLinear:
-            [self updateAnimationLayerLinear];
-            break;
-            
-        case SXMTickAnimationEaseOut:
-            [self updateAnimationLayerEaseOut];
-            break;
-    }
+    [_displayLink invalidate];
+    _displayLink= nil;
+    _animationLayer = nil;
 }
+
+#pragma mark - 匀速
 
 -(void)updateAnimationLayerLinear
 {
@@ -86,6 +81,8 @@
     return 3 / 60.0f;
 }
 
+#pragma mark - 先快后慢
+
 - (void)updateAnimationLayerEaseOut
 {
     _progress += [self speed];
@@ -116,7 +113,8 @@
     return 3 / 60.0f;
 }
 
-// 对勾动画
+#pragma mark - 对勾动画
+
 - (void)darwTick
 {
     UIBezierPath *path = [UIBezierPath bezierPathWithArcCenter:self.arcCenter radius:self.arcRadius startAngle:-M_PI / 2 endAngle:M_PI * 2 clockwise:YES];
@@ -152,7 +150,7 @@
             break;
     }
     
-    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:selector];
+    self.displayLink = [CADisplayLink displayLinkWithTarget:self selector:selector];
     [_displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
     _displayLink.paused = true;
 }
@@ -212,6 +210,11 @@
         _lineColor = lineColor;
         self.animationLayer.strokeColor = _lineColor.CGColor;
     }
+}
+
+- (void)dealloc
+{
+    NSLog(@"dealloc__view");
 }
 
 @end

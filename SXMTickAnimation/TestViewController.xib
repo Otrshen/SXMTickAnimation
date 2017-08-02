@@ -20,11 +20,19 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gN1-td-MPC">
-                    <rect key="frame" x="84" y="519" width="139" height="30"/>
+                    <rect key="frame" x="27" y="472" width="139" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" title="结束加载"/>
                     <connections>
                         <action selector="finish:" destination="-1" eventType="touchUpInside" id="S9A-av-Vcg"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hul-bL-Alr">
+                    <rect key="frame" x="208" y="472" width="101" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" title="结束加载"/>
+                    <connections>
+                        <action selector="finish1:" destination="-1" eventType="touchUpInside" id="eeb-aF-kiQ"/>
                     </connections>
                 </button>
             </subviews>
